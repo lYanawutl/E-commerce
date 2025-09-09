@@ -37,9 +37,26 @@ public class Test {
     System.out.println("Price with 500 THB discount: " + priceAfterFixed);
 
     System.out.println("\n- - - 3. Testing  Factory and Decorator Patterns (Shipment) - - -");
-    //สร้างการจัดส่งแบบมาตรฐาน
+    // สร้างการจัดส่งแบบมาตรฐาน
     Shipment standardShipment = shipmentFactory.createShipment("STANDARD");
     System.out.println("Base Shipment; " + standardShipment.getInfo() + ", Cost: " + standardShipment.getCost());
 
+    // "ห่อ"ด้วยบริการห่อของขวัญ
+    Shipment giftWrapped = new GiftWrapDecorator(standardShipment);
+    System.out.println("Decorate: " + giftWrapped.getInfo() + ", Cost: " + giftWrapped.getCost());
+
+    // "ห่อ"ทับด้วยบริการประกันสินค้า
+    Shipment fullyLoaded = new InsuranceDecorator(standardShipment, myOrder);
+    System.out.println("Fully Decoreated: " + fullyLoaded.getInfo() + ", Cost: " + fullyLoaded.getCost());
+
+    System.out.println("\n - - 4. Printing Final Summery - - ");
+    double finalPrice = priceAfterPercentage; //สมมติว่าลด 10%
+    double totalCost = finalPrice + fullyLoaded.getCost();
+    System.out.println("Final price after discout: " + finalPrice);
+    System.out.println("Final shipment cost: " + fullyLoaded.getCost());
+    System.out.println("TOTAL TO PAY: " + totalCost);
+
+    // - - - 5. testing Observer Pattern (Processing Order) - - -
+    orderProcessor.processOrder(myOrder);
   }   
 }
